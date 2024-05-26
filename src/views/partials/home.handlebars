@@ -1,0 +1,20 @@
+{{#if products.length}}
+{{#each products}}
+
+<div>class="card"  
+    <ul>
+        <li>id:{{this.id}}</li>
+        <li><title>:{{this.title}}</title></li>
+        <li><code>:{{this.code}}</code></li>
+        <li>description:{{this.description}}</li>
+        <li>price:{{this.price}}</li>
+        <li>image:{{this.image}}</li>
+        <li>status:{{this.status}}</li>
+        <li>stock:{{this.stock}}</li>
+        <li>category:{{this.category}}</li>
+    </ul>
+</div>
+{{/each}}   
+{{/else}}
+<h1>No hay productos</h1>
+{{/if}}     
