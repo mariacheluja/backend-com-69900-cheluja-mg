@@ -1116,3 +1116,1292 @@
 //     res.status(500).send("Error al agregar el producto");
 //   }
 // });
+
+
+//user controller pruebajsjs
+
+// import * as service from "../services/user.services.js"; //exporto todo 
+
+
+
+// export const getById = async (req, res, next) => {
+//   try {
+//     const { id } = req.params;
+//     const item = await service.getByIdUser(id);
+//     if (!item) throw new Error("User not found!");
+
+//     res.json(item);
+//   } catch (error) {
+//     next(error);
+//   }
+// };
+
+// export const getByEmail = async (req, res, next) => {
+//   try {
+//     const { email } = req.params;
+//     const item = await service.getByEmailUser(email);
+//     if (!item) throw new Error("User not found!");
+//     res.json(item);
+//   } catch (error) {
+//     next(error);
+//   }
+// };
+
+// export const getAll = async (req, res, next) => {
+//   try {
+//     const { page, limit } = req.query;
+//     const response = await service.getAllUsers(page, limit);
+//     res.json(response);
+//     // const next = response.hasNextPage ? `http://localhost:8080/users/all?page=${response.nextPage}` : null;
+//     // const prev = response.hasPrevPage ? `http://localhost:8080/users/all?page=${response.prevPage}` : null;
+//     // res.json({
+//     //   payload: response.docs,
+//     //   info: {
+//     //     count: response.totalDocs,
+//     //     pages: response.totalPages,
+//     //     next,
+//     //     prev
+//     //   }
+//     // })
+//   } catch (error) {   //manejo el error
+//     next(error);
+//   }
+// };
+
+// export const create = async (req, res, next) => {
+//   try {
+//     const user = { ...req.body };
+//     const newUser = await service.createUser(user);
+//     if (!newUser) throw new Error("Validation Error!");
+//     else
+//       res.json({
+//         data: newUser,
+//       });
+//   } catch (error) {
+//     next(error);
+//   }
+// };
+
+// export const update = async (req, res, next) => {
+//   try {
+//     const { id } = req.params;
+//     const { name, description, price, stock } = req.body;
+
+//     let item = await getByIdUser(id);
+
+//     if (!item) throw new Error("User not found!");
+
+//     const userUpdated = await service.updateUser(id, {
+//       name,
+//       description,
+//       price,
+//       stock,
+//     });
+
+//     res.json({
+//       msg: "User updated",
+//       data: userUpdated,
+//     });
+//   } catch (error) {
+//     next(error);
+//   }
+// };
+
+// export const remove = async (req, res, next) => {
+//   try {
+//     const { id } = req.params;
+
+//     await service.deleteUser(id);
+
+//     res.json({
+//       msg: "User deleted",
+//     });
+//   } catch (error) {
+//     next(error);
+//   }
+// };
+
+
+// import * as service from "../services/user.services.js";
+
+// export const getById = async (req, res, next) => {
+//   try {
+//     const { id } = req.params;
+//     const item = await service.getByIdUser(id);
+//     if (!item) throw new Error("User not found!");
+//     res.json(item);
+//   } catch (error) {
+//     next(error);
+//   }
+// };
+
+// export const getByEmail = async (req, res, next) => {
+//   try {
+//     const { email } = req.params;
+//     const item = await service.getByEmailUser(email);
+//     if (!item) throw new Error("User not found!");
+//     res.json(item);
+//   } catch (error) {
+//     next(error);
+//   }
+// };
+
+// export const getAll = async (req, res, next) => {
+//   try {
+//     const { page, limit } = req.query;
+//     const response = await service.getAllUsers(page, limit);
+//     const nextLink = response.hasNextPage ? `/users/all?page=${response.nextPage}` : null;
+//     const prevLink = response.hasPrevPage ? `/users/all?page=${response.prevPage}` : null;
+//     res.json({
+//       data: response.docs,
+//       pageInfo: {
+//         totalItems: response.totalDocs,
+//         totalPages: response.totalPages,
+//         nextPage: nextLink,
+//         prevPage: prevLink
+//       }
+//     });
+//   } catch (error) {
+//     next(error);
+//   }
+// };
+
+// export const create = async (req, res, next) => {
+//   try {
+//     const user = { ...req.body };
+//     const newUser = await service.createUser(user);
+//     if (!newUser) throw new Error("Validation Error!");
+//     res.json({
+//       msg: "User created successfully",
+//       data: newUser,
+//     });
+//   } catch (error) {
+//     next(error);
+//   }
+// };
+
+// export const update = async (req, res, next) => {
+//   try {
+//     const { id } = req.params;
+//     const { name, description, price, stock } = req.body;
+
+//     let item = await service.getByIdUser(id);
+//     if (!item) throw new Error("User not found!");
+
+//     const userUpdated = await service.updateUser(id, {
+//       name,
+//       description,
+//       price,
+//       stock,
+//     });
+
+//     res.json({
+//       msg: "User updated successfully",
+//       data: userUpdated,
+//     });
+//   } catch (error) {
+//     next(error);
+//   }
+// };
+
+// export const remove = async (req, res, next) => {
+//   try {
+//     const { id } = req.params;
+//     await service.deleteUser(id);
+//     res.json({
+//       msg: "User deleted successfully",
+//     });
+//   } catch (error) {
+//     next(error);
+//   }
+// };
+
+//product.dao.js prueba
+
+// import { ProductModel } from "./models/product.model.js";
+
+// export default class ProductDaoMongoDB {
+//   async getAll(page = 1, limit = 10, name, sort) {
+//     try {
+//       const filter = name ? { 'name': name }: {category: category}; {}; //buscamos por name, si no devuelve el array con todos los productos
+//       let sortOrder = {};
+//       if(sort) sortOrder.price = sort === 'asc' ? 1 : sort === 'desc' ? -1 : null; // aca ordenamos por precio 
+//       //{price: 1}
+//       const response = await ProductModel.paginate(filter, { page, limit, sort: sortOrder, category }); // respetar el orden que pusimos aca en el service
+//       return response;
+//     } catch (error) {
+//       console.log(error);
+//     }
+//   }
+
+//   async getById(id) {
+//     try {
+//       const response = await ProductModel.findById(id);
+//       return response;
+//     } catch (error) {
+//       console.log(error);
+//     }
+//   }
+
+//   async create(obj) {
+//     try {
+//       const response = await ProductModel.create(obj);
+//       return response;
+//     } catch (error) {
+//       console.log(error);
+//     }
+//   }
+
+//   async update(id, obj) {
+//     try {
+//       const response = await ProductModel.findByIdAndUpdate(id, obj, {
+//         new: true,
+//       });
+//       return response;
+//     } catch (error) {
+//       console.log(error);
+//     }
+//   }
+
+//   async delete(id) {
+//     try {
+//       const response = await ProductModel.findByIdAndDelete(id);
+//       return response;
+//     } catch (error) {
+//       console.log(error);
+//     }
+//   }
+// }
+
+//cart.routers
+// import { Router } from "express";
+// import CartManager from "../../managers/cart.manager.js";
+// import { __dirname } from "../../utils.js";
+
+// const router = Router();
+// const cartManager = new CartManager(`${__dirname}/db/carts.json`);
+
+// // Ruta para agregar un producto al carrito
+// router.post("/:idCart/product/:idProd", async (req, res, next) => {
+//   try {
+//     const { idProd, idCart } = req.params;
+//     const response = await cartManager.saveProductToCart(idCart, idProd);
+//     res.json(response);
+//   } catch (error) {
+//     next(error);
+//   }
+// });
+
+// // Ruta para crear un nuevo carrito
+// router.post("/", async (req, res) => {
+//   try {
+//     const newCart = await cartManager.createCart();
+//     res.json(newCart);
+//   } catch (error) {
+//     res.status(500).json(error.message);
+//   }
+// });
+
+// // Ruta para obtener un carrito por ID
+// router.get("/:idCart", async (req, res) => {
+//   try {
+//     const { idCart } = req.params;
+//     const cart = await cartManager.getCartById(idCart);
+//     res.json(cart);
+//   } catch (error) {
+//     console.log(error);
+//     res.status(500).json(error.message);
+//   }
+// });
+
+// // export default router;
+// import { Router } from "express";
+// //import * as controller from "../controllers/cart.controllers.js";
+// //import * as controller from "../src/controllers/cart.controllers.js";
+// import * as controller from "./controller/cart.controllers.js";
+
+// const router = Router();
+
+// // Obtener todos los carritos
+// router.get("/", controller.getAll);
+
+// // Obtener un carrito por ID
+// router.get("/:id", controller.getById);
+
+// // Crear un nuevo carrito
+// router.post("/", controller.create);
+
+// // Actualizar un carrito por ID
+// router.put("/:id", controller.update);
+
+// // Eliminar un carrito por ID
+// router.delete("/:id", controller.remove);
+
+// // Añadir un producto a un carrito específico
+// router.post("/:idCart/products/:idProd", controller.addProdToCart);
+
+// // Eliminar un producto de un carrito específico
+// router.delete("/:idCart/products/:idProd", controller.removeProdToCart);
+
+// // Actualizar la cantidad de un producto en un carrito específico
+// router.put("/:idCart/products/:idProd", controller.updateProdQuantityToCart);
+
+// // Vaciar un carrito específico
+// router.delete("/clear/:idCart", controller.clearCart);
+
+// export default router;
+
+//router.product
+
+// import { Router } from "express";
+// const router = Router();
+
+// import { __dirname } from "../../utils.js";
+
+// import ProductManager from "../../managers/product.manager.js";
+// const productManager = new ProductManager(`${__dirname}/db/products.json`);
+
+// import {productValidator} from '../../middlewares/productValidator.js'
+
+// router.get('/', async(req, res) => {
+//     try {
+//         const { limit } = req.query;
+//         console.log(limit);
+//         const products = await productManager.getProducts(limit);
+//         res.status(200).json(products);
+//     } catch (error) {
+//         res.status(404).json({ message: error.message });
+//         console.log(error);
+//     }
+// });
+
+// router.get("/:idProd", async (req, res) => {
+//     try {
+//       const { idProd } = req.params;
+//       const product = await productManager.getProductById(idProd);
+//       if (!product) res.status(404).json({ msg: "product not found" });
+//       else res.status(200).json(product);
+//     } catch (error) {
+//       res.status(500).json({ msg: error.message });
+//     }
+//   });
+
+
+// router.post('/', productValidator, async (req, res)=>{     // aca le agrego el validador de productos que viene del middleware
+
+//     try {
+//         console.log(req.body.description);
+//         const product = req.body;
+//         const newProduct = await productManager.createProduct(product);
+//         res.json(newProduct);
+//     } catch (error) {
+//         res.status(404).json({ message: error.message });
+//     }
+// });
+
+// router.put("/:idProd", async (req, res) => {
+//     try {
+//       const { idProd } = req.params;
+//       const prodUpd = await productManager.updateProduct(req.body, idProd);
+//       if (!prodUpd) res.status(404).json({ msg: "Error updating prod" });
+//       res.status(200).json(prodUpd);
+//     } catch (error) {
+//       res.status(500).json({ msg: error.message });
+//     }
+//   });
+
+// router.delete("/:idProd", async (req, res) => {
+//     try {
+//       const { idProd } = req.params;
+//       const delProd = await productManager.deleteProduct(idProd);
+//       if(!delProd) res.status(404).json({ msg: "Error delete product" });
+//       else res.status(200).json({msg : `product id: ${idProd} deleted successfully`})
+//     } catch (error) {
+//       res.status(500).json({ msg: error.message });
+//     }
+//   });
+
+// router.delete('/', async(req, res)=>{
+//     try {
+//         await productManager.deleteFile();
+//         res.send('products deleted successfully')
+//     } catch (error) {
+//         res.status(404).json({ message: error.message });
+
+//     }
+// });
+
+// export default router;
+
+//user router
+// import { Router } from 'express';
+// import * as controller from '../controllers/users.controllers.js';
+//colocar todo lo de users revisar...
+// const router = Router();
+
+// // Rutas para manejar archivos
+// //router.post('/file', controller.createFileCtr);
+//  router.post('/', controller.createCtr);
+// // Ruta para crear un usuario
+// router.post('/', controller.createCtr);
+
+// // Rutas para obtener todos los usuarios
+// router.get('/all', controller.getAllCtr);
+
+// // Ruta para buscar por nombre
+// router.get('/name/:name', controller.getByNameCtr);
+
+// // Ruta para obtener un usuario por ID
+// router.get('/:id', controller.getByIdCtr);
+
+// // Ruta alternativa para obtener un usuario por ID
+// router.get('/id/:id', controller.getByIdCtr);
+
+// // Ruta para buscar por email
+// router.get('/email/:email', controller.getByEmailCtr);
+
+// // Ruta para actualizar un usuario por ID
+// router.put('/:id', controller.updateCtr);
+
+// // Ruta alternativa para actualizar un usuario (ejemplo de otro controlador)
+// router.put('/update/:id', controller.update);
+
+// // Ruta para eliminar un usuario por ID
+// router.delete('/:id', controller.deleteCtr);
+
+// // Ruta alternativa para eliminar un usuario (ejemplo de otro controlador)
+// router.delete('/remove/:id', controller.remove);
+
+// export default router;
+//string de coneccion en conexion.js
+
+// import mongoose from "mongoose";
+
+// const conectionString = "mongodb+srv://admin:admin@cluster0.kou88d2.mongodb.net/mydatabase?retryWrites=true&w=majority";
+
+// const initMongoDB = async () => {
+//     try {
+//         await mongoose.connect(conectionString);
+//         console.log("MongoDB connected");   
+//     } catch (error) {
+//         console.log(error);
+//     }
+        
+//     }
+
+//     initMongoDB(); 
+    
+    //export default mongoose;    
+
+//     import mongoose from "mongoose";
+
+// // Asegúrate de reemplazar 'admin' con la contraseña real si 'admin' no es tu contraseña
+// const connectionString = "mongodb+srv://admin:admin@cluster0.kou88d2.mongodb.net/mydatabase?retryWrites=true&w=majority";
+
+// const initMongoDB = async () => {
+//     try {
+//         await mongoose.connect(connectionString, {
+//             useNewUrlParser: true,
+//             useUnifiedTopology: true,
+//         });
+//         console.log("MongoDB connected");   
+//     } catch (error) {
+//         console.error("Error connecting to MongoDB:", error);
+//     }
+// }
+
+// initMongoDB();
+
+// Si deseas exportar mongoose para usarlo en otros módulos, descomenta la línea siguiente
+// export default mongoose;
+
+
+// products.router.js version 2
+
+// import { Router } from "express";
+// import * as controller from "../../../src/controllers/product.controllers.js";
+
+// const router = Router();
+
+// router.get("/", controller.getAll);
+// router.get("/:id", controller.getById);
+// router.post("/", controller.create);
+// router.put("/:id", controller.update);
+// router.delete("/:id", controller.remove);
+// router.post("/:idCart/products/:idProd", controller.addProdToCart);
+// router.delete("/:idCart/products/:idProd", controller.removeProdToCart);
+// router.put("/:idCart/products/:idProd", controller.updateProdQuantityToCart);
+// router.delete("/clear/:idCart", controller.clearCart);
+
+// export default router;
+
+
+//este server rompio todo
+
+
+// import express from 'express';
+// import handlebars from 'express-handlebars';
+// import { Server } from 'socket.io';
+// import morgan from 'morgan';
+
+// import { initMongoDB } from './db/database.js';
+
+
+// import ProductsManager from './managers/product.manager.js';
+// import CartManager from './managers/cart.manager.js';
+// import MessageManager from './managers/messages.manager.js';
+
+// import viewsRouter from './routes/views.router.js';
+// import productsRouter from './routes/api/products.router.js';
+// import userRouter from './routes/users.router.js';
+// import cartRouter from './routes/api/cart.router.js';
+
+// import { fileURLToPath } from 'url';
+// import path from 'path';
+
+// const __dirname = path.dirname(fileURLToPath(import.meta.url));
+
+// const app = express();
+// const PORT = process.env.PORT || 8080;
+
+// // Middleware
+// app.use(express.json());
+// app.use(express.urlencoded({ extended: true }));
+// app.use(morgan('dev'));
+
+// // Configura el motor de plantillas Handlebars
+// app.engine('handlebars', handlebars());
+// app.set('view engine', 'handlebars');
+// app.set('views', path.join(__dirname, 'views'));
+
+// // Inicializa la conexión a MongoDB
+// initMongoDB();
+
+// // Inicializa ProductManager, CartManager y MessageManager
+// const productManager = new ProductsManager(path.join(__dirname, 'db/products.json'));
+// const cartManager = new CartManager(path.join(__dirname, 'db/carts.json'));
+// const messageManager = new MessageManager(path.join(__dirname, 'db/messages.json'));
+
+// // Rutas
+// app.use('/products', productsRouter);
+// app.use('/api/products', productsRouter);
+// app.use('/users', userRouter);
+// app.use('/api/carts', cartRouter);
+// app.use('/', viewsRouter);
+// app.use('/chat', viewsRouter);
+// app.use('/realTimeProducts', viewsRouter);
+// app.use('/vista1', viewsRouter);
+// app.use('/vista2', viewsRouter);
+// app.use('/websocket', viewsRouter);
+
+// // Manejo de errores
+// app.use(errorHandler);
+
+// // Configura el servidor HTTP y Socket.io
+// const httpServer = app.listen(PORT, () => {
+//   console.log(`🚀 Server listening on port ${PORT}`);
+// });
+
+// const socketServer = new Server(httpServer);
+
+// socketServer.on('connection', async (socket) => {
+//   console.log('🟢 ¡New connection!', socket.id);
+
+//   // Emitir productos actuales a los clientes
+//   socketServer.emit('products', await productManager.getProducts());
+
+//   socket.on('disconnect', () => {
+//     console.log('🔴 User disconnect', socket.id);
+//   });
+
+//   socket.on('newUser', (user) => {
+//     console.log(`> ${user} ha iniciado sesión`);
+//     socket.broadcast.emit('newUser', user);
+//   });
+
+//   socket.on('addProductToCart', async ({ cartId, productId }) => {
+//     try {
+//       const updatedCart = await cartManager.saveProductToCart(cartId, productId);
+//       socket.emit('productAdded', updatedCart);
+//     } catch (error) {
+//       socket.emit('error', error.message);
+//     }
+//   });
+
+//   socket.on('removeProductFromCart', async (productId) => {
+//     // Lógica para eliminar el producto del carrito
+//     socket.emit('productRemoved', productId);
+//   });
+
+//   socket.on('chat:message', async (msg) => {
+//     await messageManager.createMsg(msg);
+//     socketServer.emit('messages', await messageManager.getAll());
+//   });
+
+//   socket.on('chat:typing', (username) => {
+//     socket.broadcast.emit('chat:typing', username);
+//   });
+// });
+
+// // Define rutas adicionales
+// app.get('/products', async (req, res) => {
+//   const products = await productManager.getProducts();
+//   res.json(products);
+// });
+
+// app.post('/cart', async (req, res) => {
+//   const { cartId, productId } = req.body;
+//   try {
+//     const updatedCart = await cartManager.saveProductToCart(cartId, productId);
+//     res.status(200).json(updatedCart);
+//   } catch (error) {
+//     res.status(500).json({ message: error.message });
+//   }
+// });
+
+// app.post('/products/add', async (req, res) => {
+//   try {
+//     const { title, description, code, price, stock, category } = req.body;
+//     const newProduct = await productManager.createProduct({ title, description, code, price, stock, category });
+//     res.status(201).json(newProduct);
+//   } catch (error) {
+//     console.error("Error al agregar el producto:", error);
+//     res.status(500).send("Error al agregar el producto");
+//   }
+// });
+
+
+
+//cart.router.js
+
+
+
+// // import { Router } from "express";
+// import * as controller from "../controllers/cart.controllers.js";
+
+// const router = Router();
+
+// router.get("/", controller.getAll);
+
+// router.get("/:id", controller.getById);
+
+// router.post("/", controller.create);
+
+// router.put("/:id", controller.update);
+
+// router.delete("/:id", controller.remove);
+
+// router.post("/:idCart/products/:idProd", controller.addProdToCart);
+
+// router.delete("/:idCart/products/:idProd", controller.removeProdToCart);
+
+// router.put("/:idCart/products/:idProd", controller.updateProdQuantityToCart);
+
+// router.delete("/clear/:idCart", controller.clearCart);
+
+// export default router;
+
+
+// import { Router } from "express";
+// import CartManager from "../../managers/cart.manager.js";
+// import { __dirname } from "../../utils.js";
+
+// const router = Router();
+// const cartManager = new CartManager(`${__dirname}/db/carts.json`);
+
+// // Ruta para agregar un producto al carrito
+// router.post("/:idCart/product/:idProd", async (req, res, next) => {
+//   try {
+//     const { idProd, idCart } = req.params;
+//     const response = await cartManager.saveProductToCart(idCart, idProd);
+//     res.json(response);
+//   } catch (error) {
+//     next(error);
+//   }
+// });
+
+// // Ruta para crear un nuevo carrito
+// router.post("/", async (req, res) => {
+//   try {
+//     const newCart = await cartManager.createCart();
+//     res.json(newCart);
+//   } catch (error) {
+//     res.status(500).json(error.message);
+//   }
+// });
+
+// // Ruta para obtener un carrito por ID
+// router.get("/:idCart", async (req, res) => {
+//   try {
+//     const { idCart } = req.params;
+//     const cart = await cartManager.getCartById(idCart);
+//     res.json(cart);
+//   } catch (error) {
+//     console.log(error);
+//     res.status(500).json(error.message);
+//   }
+// });
+
+
+//cart.router
+
+// router.post("/", async (req, res) => {
+//     try {
+//       const newCart = await cartManager.createCart();
+//       res.json(newCart);
+//     } catch (error) {
+//       res.status(500).json(error.message);
+//     }
+//   });
+  
+//   // Ruta para obtener un carrito por ID
+//   router.get("/:idCart", async (req, res) => {
+//     try {
+//       const { idCart } = req.params;
+//       const cart = await cartManager.getCartById(idCart);
+//       res.json(cart);
+//     } catch (error) {
+//       console.log(error);
+//       res.status(500).json(error.message);
+//     }
+//   });
+
+
+//cartrouter.js por fuera
+
+
+
+// // // export default router;
+// import { Router } from "express";
+// //import * as controller from "../controllers/cart.controllers.js";
+// //import * as controller from "../src/controllers/cart.controllers.js";
+// //import * as controller from "./controller/cart.controllers.js";
+// import * as controller from "../controllers/cart.controllers.js";
+
+// const router = Router();
+
+// // Obtener todos los carritos
+// router.get("/", controller.getAll);
+
+// // Obtener un carrito por ID
+// router.get("/:id", controller.getById);
+
+// // Crear un nuevo carrito
+// router.post("/", controller.create);
+
+// // Actualizar un carrito por ID
+// router.put("/:id", controller.update);
+
+// // Eliminar un carrito por ID
+// router.delete("/:id", controller.remove);
+
+// // Añadir un producto a un carrito específico
+// router.post("/:idCart/products/:idProd", controller.addProdToCart);
+
+// // Eliminar un producto de un carrito específico
+// router.delete("/:idCart/products/:idProd", controller.removeProdToCart);
+
+// // Actualizar la cantidad de un producto en un carrito específico
+// router.put("/:idCart/products/:idProd", controller.updateProdQuantityToCart);
+
+// // Vaciar un carrito específico
+// router.delete("/clear/:idCart", controller.clearCart);
+
+
+// const cartManager = new CartManager(`${__dirname}/db/carts.json`);
+
+// //Ruta para agregar un producto al carrito
+// router.post("/:idCart/product/:idProd", async (req, res, next) => {
+//   try {
+//     const { idProd, idCart } = req.params;
+//     const response = await cartManager.saveProductToCart(idCart, idProd);
+//     res.json(response);
+//   } catch (error) {
+//     next(error);
+//   }
+// });
+
+// // Ruta para crear un nuevo carrito
+//export default router;
+
+
+//product.router prueba
+
+
+
+// import { Router } from "express";
+// import * as controller from "../../../src/controllers/product.controllers.js";
+
+// const router = Router();
+
+// import { __dirname } from "../../utils.js";
+
+// import ProductManager from "../../managers/product.manager.js";
+// const productManager = new ProductManager(`${__dirname}/db/products.json`);
+
+// import CartManager from "../../managers/cart.manager.js"; // Asegúrate de importar CartManager
+// const cartManager = new CartManager(`${__dirname}/db/carts.json`);
+
+// import { productValidator } from '../../middlewares/productValidator.js';
+
+// router.get('/', async (req, res) => {
+//     try {
+//         const { limit } = req.query;
+//         console.log(limit);
+//         const products = await productManager.getProducts(limit);
+//         res.status(200).json(products);
+//     } catch (error) {
+//         res.status(404).json({ message: error.message });
+//         console.log(error);
+//     }
+// });
+
+// router.get("/:idProd", async (req, res) => {
+//     try {
+//         const { idProd } = req.params;
+//         const product = await productManager.getProductById(idProd);
+//         if (!product) res.status(404).json({ msg: "product not found" });
+//         else res.status(200).json(product);
+//     } catch (error) {
+//         res.status(500).json({ msg: error.message });
+//     }
+// });
+
+// router.post('/', productValidator, async (req, res) => { // Agregar el validador de productos que viene del middleware
+//     try {
+//         console.log(req.body.description);
+//         const product = req.body;
+//         const newProduct = await productManager.createProduct(product);
+//         res.json(newProduct);
+//     } catch (error) {
+//         res.status(404).json({ message: error.message });
+//     }
+// });
+
+// router.put("/:idProd", async (req, res) => {
+//     try {
+//         const { idProd } = req.params;
+//         const prodUpd = await productManager.updateProduct(req.body, idProd);
+//         if (!prodUpd) res.status(404).json({ msg: "Error updating prod" });
+//         res.status(200).json(prodUpd);
+//     } catch (error) {
+//         res.status(500).json({ msg: error.message });
+//     }
+// });
+
+// router.delete("/:idProd", async (req, res) => {
+//     try {
+//         const { idProd } = req.params;
+//         const delProd = await productManager.deleteProduct(idProd);
+//         if (!delProd) res.status(404).json({ msg: "Error delete product" });
+//         else res.status(200).json({ msg: `product id: ${idProd} deleted successfully` });
+//     } catch (error) {
+//         res.status(500).json({ msg: error.message });
+//     }
+// });
+
+// router.delete('/', async (req, res) => {
+//     try {
+//         await productManager.deleteFile();
+//         res.send('products deleted successfully');
+//     } catch (error) {
+//         res.status(404).json({ message: error.message });
+//     }
+// });
+
+// // Ruta para agregar un producto al carrito
+// router.post("/:idCart/product/:idProd", async (req, res, next) => {
+//     try {
+//         const { idProd, idCart } = req.params;
+//         const response = await cartManager.saveProductToCart(idCart, idProd);
+//         res.json(response);
+//     } catch (error) {
+//         next(error);
+//     }
+// });
+
+// export default router;
+
+
+//cart.dao
+
+
+// import { CartModel } from "./models/cart.model.js";
+
+// export default class CartDaoMongoDB {
+//   async create() {
+//     try {
+//       return await CartModel.create({
+//         products: [],
+//       });
+//     } catch (error) {
+//       console.log(error);
+//     }
+//   }
+
+//   async getAll() {
+//     try {
+//       return await CartModel.find({});
+//     } catch (error) {
+//       console.log(error);
+//     }
+//   }
+
+//   async getById(id) {
+//     try {
+//       return await CartModel.findById(id).populate("products.product"); // devuelve la info completa del producto con populate
+//     } catch (error) {
+//       console.log(error);
+//     }
+//   }
+
+//   async delete(id) {
+//     try {
+//       return await CartModel.findByIdAndDelete(id);
+//     } catch (error) {
+//       console.log(error);
+//     }
+//   }
+
+//   async existProdInCart(cartId, prodId){
+//     try {
+//       return await CartModel.findOne({
+//         _id: cartId,
+//         products: { $elemMatch: { product: prodId } }
+//       });
+//       //return await CartModel.findOne(
+//         //{ _id: cartId, 'products.product': prodId }
+//       // )
+//     } catch (error) {
+//       throw new Error(error);
+//     }
+//   }
+
+//   async addProdToCart(cartId, prodId, quantity) {
+//     try {
+//       const existProdInCart = await this.existProdInCart(cartId, prodId);
+//         if(existProdInCart){
+//           return await CartModel.findOneAndUpdate(
+//             { _id: cartId, 'products.product': prodId },
+//             { $set: { 'products.$.quantity': existProdInCart.products[0].quantity + 1 } },
+//             { new: true }
+//           );
+//         } else {
+//           return await CartModel.findByIdAndUpdate(
+//             cartId,
+//             { $push: { products: { product: prodId, quantity } } },
+//             { new: true } // array del producto con el carrito
+//           )
+//         }
+//     } catch (error) {
+//       console.log(error);
+//     }
+//   }
+
+//   async removeProdToCart(cartId, prodId) {
+//     try {
+//       return await CartModel.findByIdAndUpdate(
+//         { _id: cartId },
+//         { $pull: { products: { product: prodId } } },
+//         { new: true }
+//       )
+//     } catch (error) {
+//       console.log(error);
+//     }
+//   }
+
+//   async update(id, obj) {
+//     try {
+//       const response = await CartModel.findByIdAndUpdate(id, obj, {
+//         new: true,
+//       });
+//       return response;
+//     } catch (error) {
+//       console.log(error);
+//     }
+//   }
+
+//   async updateProdQuantityToCart(cartId, prodId, quantity) {
+//     try {
+//       return await CartModel.findOneAndUpdate(
+//         { _id: cartId, 'products.product': prodId },
+//         { $set: { 'products.$.quantity': quantity } },
+//         { new: true }
+//       );
+//     } catch (error) {
+//       console.log(error);
+//     }
+//   }
+
+//   async clearCart(cartId) {
+//     try {
+//      return await CartModel.findOneAndUpdate(
+//       { _id: cartId },
+//       { $set: { products: [] } },
+//       { new: true }
+//      )
+//     } catch (error) {
+//       console.log(error);
+//     }
+//   }
+// }
+
+
+//product.dao prueba
+
+// import { ProductModel } from "./models/product.model.js";
+
+// export default class ProductDaoMongoDB {
+
+//   // Obtener todos los productos con paginación, filtrado y ordenación
+//   async getAll(page = 1, limit = 10, name, category, sort) {
+//     try {
+//       // Definir el filtro
+//       const filter = {};
+//       if (name) filter.name = name;
+//       if (category) filter.category = category;
+
+//       // Definir el orden de clasificación
+//       const sortOrder = {};
+//       if (sort) sortOrder.price = sort === 'asc' ? 1 : -1;
+
+//       const response = await ProductModel.paginate(filter, { page, limit, sort: sortOrder });
+//       return response;
+//     } catch (error) {
+//       console.error('Error fetching products:', error);
+//       throw new Error('Error fetching products');
+//     }
+//   }
+
+//   // Obtener un producto por su ID
+//   async getById(id) {
+//     try {
+//       const response = await ProductModel.findById(id);
+//       return response;
+//     } catch (error) {
+//       console.error('Error fetching product by ID:', error);
+//       throw new Error('Error fetching product by ID');
+//     }
+//   }
+
+//   // Crear un nuevo producto
+//   async create(obj) {
+//     try {
+//       const response = await ProductModel.create(obj);
+//       return response;
+//     } catch (error) {
+//       console.error('Error creating product:', error);
+//       throw new Error('Error creating product');
+//     }
+//   }
+
+//   // Actualizar un producto por su ID
+//   async update(id, obj) {
+//     try {
+//       const response = await ProductModel.findByIdAndUpdate(id, obj, { new: true });
+//       return response;
+//     } catch (error) {
+//       console.error('Error updating product:', error);
+//       throw new Error('Error updating product');
+//     }
+//   }
+
+//   // Eliminar un producto por su ID
+//   async delete(id) {
+//     try {
+//       const response = await ProductModel.findByIdAndDelete(id);
+//       return response;
+//     } catch (error) {
+//       console.error('Error deleting product:', error);
+//       throw new Error('Error deleting product');
+//     }
+//   }
+// }
+
+//porduct.controllers
+
+
+// import * as service from "../services/product.services.js";
+
+// export const getAll = async (req, res, next) => {
+//   try {
+//     const { page = 1, limit = 10, title, sort, category } = req.query; // Valores predeterminados para paginación
+//     const response = await service.getAll(page, limit, title, sort, category);
+
+//     // Construir los enlaces de paginación
+//     const baseUrl = `http://localhost:8080/products`;
+//     const buildLink = (page) => {
+//       let url = `${baseUrl}?page=${page}`;
+//       if (limit) url += `&limit=${limit}`;
+//       if (title) url += `&title=${title}`;
+//       if (sort) url += `&sort=${sort}`;
+//       if (category) url += `&category=${category}`;
+//       return url;
+//     };
+    
+//     const nextLink = response.hasNextPage ? buildLink(response.nextPage) : null;
+//     const prevLink = response.hasPrevPage ? buildLink(response.prevPage) : null;
+
+//     res.status(200).json({
+//       status: 'success',
+//       payload: response.docs,
+//       totalDocs: response.totalDocs,
+//       totalPages: response.totalPages,
+//       page: response.page,
+//       hasNextPage: response.hasNextPage,
+//       hasPrevPage: response.hasPrevPage,
+//       prevPage: response.prevPage,
+//       nextPage: response.nextPage,
+//       prevLink,
+//       nextLink
+//     });
+//   } catch (error) {
+//     next(error);
+//   }
+// };
+
+// export const getById = async (req, res, next) => {
+//   try {
+//     const { id } = req.params;
+//     const response = await service.getById(id);
+//     if (!response) return res.status(404).json({ msg: "Product not found!" });
+//     res.status(200).json(response);
+//   } catch (error) {
+//     next(error);
+//   }
+// };
+
+// export const create = async (req, res, next) => {
+//   try {
+//     const newProd = await service.create(req.body);
+//     if (!newProd) return res.status(400).json({ msg: "Error creating product!" });
+//     res.status(201).json(newProd); // Cambiar a 201 para creación exitosa
+//   } catch (error) {
+//     next(error);
+//   }
+// };
+
+// export const update = async (req, res, next) => {
+//   try {
+//     const { id } = req.params;
+//     const prodUpd = await service.update(id, req.body);
+//     if (!prodUpd) return res.status(400).json({ msg: "Error updating product!" });
+//     res.status(200).json(prodUpd);
+//   } catch (error) {
+//     next(error);
+//   }
+// };
+
+// export const remove = async (req, res, next) => {
+//   try {
+//     const { id } = req.params;
+//     const prodDel = await service.remove(id);
+//     if (!prodDel) return res.status(400).json({ msg: "Error deleting product!" });
+//     res.status(200).json({ msg: `Product id: ${id} deleted` });
+//   } catch (error) {
+//     next(error);
+//   }
+// };
+
+
+//no se que es ya estoy mareada me andaba el paginate y ahora no LPM!!!
+
+// import { Router } from "express";
+// // import * as controller from "../../../src/controllers/product.controllers.js";
+// import * as controller from "../../controllers/product.controllers.js";
+
+// const router = Router();
+
+// import { __dirname } from "../../utils.js";
+
+// import ProductManager from "../../managers/product.manager.js";
+// const productManager = new ProductManager(`${__dirname}/db/products.json`);
+
+// import CartManager from "../../managers/cart.manager.js"; // Importar CartManager
+// const cartManager = new CartManager(`${__dirname}/db/carts.json`);
+
+
+// import {productValidator} from '../../middlewares/productValidator.js'
+
+// router.get('/', async(req, res) => {
+//     try {
+//         const { limit } = req.query;
+//         console.log(limit);
+//         const products = await productManager.getProducts(limit);
+//         res.status(200).json(products);
+//     } catch (error) {
+//         res.status(404).json({ message: error.message });
+//         console.log(error);
+//     }
+// });
+
+// router.get("/:idProd", async (req, res) => {
+//     try {
+//       const { idProd } = req.params;
+//       const product = await productManager.getProductById(idProd);
+//       if (!product) res.status(404).json({ msg: "product not found" });
+//       else res.status(200).json(product);
+//     } catch (error) {
+//       res.status(500).json({ msg: error.message });
+//     }
+//   });
+
+
+// router.post('/', productValidator, async (req, res)=>{     // aca le agrego el validador de productos que viene del middleware
+
+//     try {
+//         console.log(req.body.description);
+//         const product = req.body;
+//         const newProduct = await productManager.createProduct(product);
+//         res.json(newProduct);
+//     } catch (error) {
+//         res.status(404).json({ message: error.message });
+//     }
+// });
+
+// router.put("/:idProd", async (req, res) => {
+//     try {
+//       const { idProd } = req.params;
+//       const prodUpd = await productManager.updateProduct(req.body, idProd);
+//       if (!prodUpd) res.status(404).json({ msg: "Error updating prod" });
+//       res.status(200).json(prodUpd);
+//     } catch (error) {
+//       res.status(500).json({ msg: error.message });
+//     }
+//   });
+
+// router.delete("/:idProd", async (req, res) => {
+//     try {
+//       const { idProd } = req.params;
+//       const delProd = await productManager.deleteProduct(idProd);
+//       if(!delProd) res.status(404).json({ msg: "Error delete product" });
+//       else res.status(200).json({msg : `product id: ${idProd} deleted successfully`})
+//     } catch (error) {
+//       res.status(500).json({ msg: error.message });
+//     }
+//   });
+
+// router.delete('/', async(req, res)=>{
+//     try {
+//         await productManager.deleteFile();
+//         res.send('products deleted successfully')
+//     } catch (error) {
+//         res.status(404).json({ message: error.message });
+
+//     }
+// });
+
+
+
+// //Ruta para agregar un producto al carrito
+// router.post("/:idCart/product/:idProd", async (req, res, next) => {
+//   try {
+//     const { idProd, idCart } = req.params;
+//     const response = await cartManager.saveProductToCart(idCart, idProd);
+//     res.json(response);
+//   } catch (error) {
+//     next(error);
+//   }
+// });
+
+// export default router;

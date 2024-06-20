@@ -87,5 +87,9 @@ socket.on('error', (errorMessage) => {
   console.error('Error:', errorMessage);
 });
 
-
+// Escucha el evento 'deleteProduct' desde el servidor
+socket.on('deleteProduct', (deletedProductId) => {
+  // Aquí puedes realizar cualquier acción que desees cuando se elimine un producto
+  console.log(`Product with ID ${deletedProductId} has been deleted`);
+});
 

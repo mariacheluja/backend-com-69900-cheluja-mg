@@ -1,4 +1,3 @@
-
 // Importaciones necesarias
 import { __dirname } from "../utils.js";
 import fs from "fs";
