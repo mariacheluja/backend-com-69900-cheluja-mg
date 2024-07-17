@@ -1,13 +1,22 @@
-//importaciones necesarias
-import mongoose, { Schema } from 'mongoose';
-import mongoosePaginate from 'mongoose-paginate-v2'; //importo el paginete de mongoose
+// Importaciones necesarias
+import mongoose from 'mongoose';
+import mongoosePaginate from 'mongoose-paginate-v2'; // Importo el paginador de mongoose
+import { Schema, model } from 'mongoose';
 
-
+// Definición del esquema de usuario
 const UserSchema = new Schema({
-  name: {
+  first_name: {
     type: String,
     required: true,
     index: true
+  },
+  last_name: { 
+    type: String, 
+    required: true 
+  },
+  age: {
+    type: Number,
+    required: true
   },
   email: {
     type: String,
@@ -20,19 +29,31 @@ const UserSchema = new Schema({
     minlength: 6,
     maxlength: 20
   },
+  role: { 
+    type: String, 
+    required: true, 
+    default: "user" 
+  },
   products: [
     {
       type: Schema.Types.ObjectId,
       ref: 'product', 
       default: []
     }
-  ]
+  ],
+  githubId: { 
+    type: String 
+  }
+  // Falta el cart id con referencia a cart
 });
 
-UserSchema.plugin(mongoosePaginate); // inicializamos el paginate
+// Inicializamos el paginate
+UserSchema.plugin(mongoosePaginate);
 
+// Pre middleware para el método find
 UserSchema.pre('find', function() {
   this.populate('products');
 });
 
-export const UserModel = mongoose.model('User', UserSchema);
+// Exportamos el modelo de usuario
+export const UserModel = model('User', UserSchema);

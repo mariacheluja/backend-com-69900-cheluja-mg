@@ -1,0 +1,24 @@
+<form action ="setCookie" method="POST">
+    <imput type="text" name="name" placeholder="ingrese su nombre..."/>
+    <imput type="text" name="email" placeholder="ingrese su email..."/>
+    <imput type="submit" value="enviar"/>
+</form> 
+
+<button id="button">Get cookie  </button>
+
+<script>
+    const button =document.querySelector("#button");
+    button.addEventListener("click",(e) => {
+        e.preventDefault();
+        const name = document.querySelector("#name").value;
+        const email = document.querySelector("#email").value;
+        console.log(name);
+        console.log(email);
+        document.cookie = `name=${name}`;
+        fetch("/getCookie")
+            .then((res) => res.json())
+            .then((data) => {
+                 console.log(data);
+             })
+    }
+</script>
