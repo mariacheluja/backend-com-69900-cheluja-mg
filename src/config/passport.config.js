@@ -155,9 +155,12 @@ import local from "passport-local";
 import GithubStrategy from "passport-github2";
 import {  createHash, comparePassword } from "../utils/hashFuntions.js";
 import {UserModel } from "../daos/mongodb/models/user.model.js";
-
+import jwt from "jsonwebtoken";
+import jwtStrategy from "passport-jwt";
 // Instanciamos LocalStrategy
 const LocalStrategy = local.Strategy;
+const JWTStrategy = jwtStrategy.Strategy;
+const ExtractJWT = jwtStrategy.ExtractJwt;
 
 // Función para inicializar Passport
 const initializePassport = () => {
@@ -221,13 +224,17 @@ const initializePassport = () => {
 
           const hashedPassword = hashPassword(password);
 
-          const newUser = await userModel.create({
+// devuelve el usuario cuando conectamos a gitrhub
+
+          const newUser = await UserModel.create({
             first_name,
             last_name,
             email: username,
             age,
             password: hashedPassword,
           });
+          
+// retornamos con un done si no tira error
 
           return done(null, newUser);
         } catch (error) {
@@ -241,30 +248,32 @@ const initializePassport = () => {
   passport.use(
     "login",
     new LocalStrategy(
-      {
-        usernameField: "email",
-      },
-      async (username, password, done) => {
-        try {
-          const user = await userModel.findOne({ email: username });
-
-          if (!user) {
-            return done(null, false, { message: "Usuario no encontrado" });
-          }
-
-          if (!comparePassword(password, user.password)) {
-            return done(null, false, { message: "Contraseña incorrecta" });
-          }
-
-          return done(null, user);
-        } catch (error) {
-          done(error);
+      
+        { usernameField: "email", passReqToCallback: true },
+        async (req, email, password, done) => {
+          try {
+            const user = await userModel.findOne({ email });
+  
+            if (!user) {
+              return done(null, false, { message: "Usuario no encontrado" });
+            }
+  
+            if (!(await comparePassword(password, user.password))) {
+              return done(null, false, { message: "Contraseña incorrecta" });
+            }
+  
+            return done(null, user);
+          } catch (error) {
+            done(error);
         }
       }
     )
   );
 
-  // Serialización del usuario
+ 
+
+
+  // Serialización del usuario, si o si cuando trabajamos con estrategias locales.
   passport.serializeUser((user, done) => {
     done(null, user._id);
   });
@@ -278,6 +287,35 @@ const initializePassport = () => {
       done(error);
     }
   });
+
+
+passport.use(
+  "jwt",
+  new JWTStrategy(
+    {
+      jwtFromRequest: ExtractJWT.fromExtractors([cookieExtractor]),
+      secretOrKey: "s3cr3t",
+    },
+    async (payload, done) => {
+      try {
+        return done(null, payload);
+      } catch (error) {
+        return done(error);
+      }
+    }
+  )
+);
 };
+
+
+function cookieExtractor(req) {
+let token = null;
+if (req && req.cookies) {
+  token = req.cookies["token"];
+}
+
+return token;
+}
+
 
 export { initializePassport };

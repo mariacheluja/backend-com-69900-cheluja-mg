@@ -1,56 +1,74 @@
-//router de users verificar que me lleve bien a los archivos
+// Importaciones necesarias
 import { Router } from 'express';
 import * as controller from '../controllers/users.controller.js';
 import * as service from "../services/user.services.js";
 import { UserModel } from "../daos/mongodb/models/user.model.js";
 
-// importo el modelo de user y lo guardo en una constante
- 
-import { createHash } from "../utils/hashFuntions.js"; 
-import {comparePassword} from "../utils/hashFuntions.js";
-
+// Importación de funciones de hashing
+import { createHash, comparePassword } from "../utils/hashFuntions.js"; // Corrige el nombre del archivo si es hashFunctions.js
 
 const router = Router();
 
+// Obtener todos los usuarios
 router.get("/", async (req, res) => {
+  try {
     const users = await UserModel.find();
-    res.json(users);
-  });
-  
-  router.post("/", async (req, res) => {
-    const { first_name, last_name, email, role, password } = req.body;
-  
-    if (!first_name || !last_name || !email || !password) {
-      return res.status(400).json({
-        error: "Falta información",
-      });
-    }
-  
-    try {
-      // Hashear contraseña, configuracion del hasheo como pide la consigna 
-      const hashPassword = createHash(password);
-  
-      const user = await userModel.create({
-        first_name,
-        last_name,
-        email,
-        role,
-        password: hashPassword,
-      });
-  
-      res.status(201).json(user);
-    } catch (error) {
-      console.log(error);
-      res.status(500).json({
-        error: "Error al crear el usuario",
-      });
-    }
-  });
+    res.status(200).json(users);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Error al obtener los usuarios", details: error.message });
+  }
+});
+
+router.get("/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+    const user = await userModel.findById(id);
+    res.status(200).json(user);
+  } catch (error) {
+    res
+      .status(500)
+      .json({ error: "Error al obtener el usuario", details: error.message });
+  }
+});
+
+// Crear un nuevo usuario
+router.post("/", async (req, res) => {
+  const { first_name, last_name, email, role, password } = req.body;
+
+  if (!first_name || !last_name || !email || !password) {
+    return res.status(400).json({
+      error: "Falta información",
+    });
+  }
+
+  try {
+    // Hashear contraseña
+    const hashPassword = createHash(password);
+
+    const user = await UserModel.create({
+      first_name,
+      last_name,
+      email,
+      role,
+      age,
+      password: hashPassword,
+    });
+
+    res.status(201).json(user);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      error: "Error al crear el usuario",
+    });
+  }
+});
+
+export default router;
 
 
 
 
-  export default router;
 
 
 

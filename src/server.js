@@ -14,6 +14,7 @@ import viewsRouter from './routes/views.router.js';
 import productsRouter from '../src/routes/api/products.router.js';
 import userRouter from './routes/users.router.js';
 import cartRouter from './routes/api/cart.router.js';
+import authRoutes from "./routes/auth.router.js";
 import sessionRouter from './routes/session.router.js'; // Corrige aquí para importar correctamente
 
 import session from "express-session";
@@ -23,6 +24,9 @@ import cookieParser from "cookie-parser";
 // login autenticacion y contraseña
 import passport from "passport";
 import { initializePassport } from "./config/passport.config.js";
+
+//configuracion del login con jwt
+import { generateToken, authToken } from "./utils/jwtFuntions.js";
 
 const FileStore = FileStoreFactory(session);
 
@@ -161,7 +165,76 @@ initializePassport(); // inicializamos la funcion
 app.use(passport.initialize()); 
 app.use(passport.session()); //session maneja el pasport por nosotros
 
+// codigo para loguearte usandom JWT 
 
+// BD
+const users = [];
+
+// Express config
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
+// Routes
+app.post("/register", (req, res) => {
+  const { first_name, last_name, email, password,role } = req.body;
+
+  if (!first_name || !email || !password) {
+    return res.status(400).json({
+      error: "Falta información",
+    });
+  }
+
+  const user = {
+    first_name,
+    last_name,
+    email,
+    password,
+    role,
+   
+  };
+
+  users.push(user);
+  res.json({ message: "Usuario registrado" });
+});
+
+app.post("/login", (req, res) => {
+  const { email, password } = req.body;
+
+  if (!email || !password) {
+    return res.status(400).json({
+      error: "Falta información",
+    });
+  }
+
+  const user = users.find((user) => user.email === email);
+
+  if (!user) {
+    return res.status(404).json({
+      error: "Usuario no encontrado",
+    });
+  }
+
+  if (user.password !== password) {
+    return res.status(401).json({
+      error: "Contraseña incorrecta",
+    });
+  }
+
+  const token = generateToken({ email: user.email });
+
+  res.json({
+    message: "Sesión iniciada",
+    token,
+  });
+});
+
+app.get("/profile", authToken, (req, res) => {
+  res.json(req.user);
+});
+
+app.get("/users", authToken, (req, res) => {
+  res.json(users);
+});
 
 
 // import express from "express";
