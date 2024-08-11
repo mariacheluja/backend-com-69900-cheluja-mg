@@ -3,11 +3,17 @@ import { Router } from 'express';
 import * as controller from '../controllers/users.controller.js';
 import * as service from "../services/user.services.js";
 import { UserModel } from "../daos/mongodb/models/user.model.js";
+import { userController } from "../controllers/users.controller.js";
+
 
 // Importación de funciones de hashing
 import { createHash, comparePassword } from "../utils/hashFuntions.js"; // Corrige el nombre del archivo si es hashFunctions.js
 
 const router = Router();
+
+router.get("/", userController.getAll);
+router.post("/", userController.create);
+
 
 // Obtener todos los usuarios
 router.get("/", async (req, res) => {

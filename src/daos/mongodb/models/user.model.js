@@ -1,8 +1,8 @@
 // Importaciones necesarias
 import mongoose from 'mongoose';
-import mongoosePaginate from 'mongoose-paginate-v2'; // Importo el paginador de mongoose
-import { Schema, model } from 'mongoose';
-import { initMongoDB } from '../../mongodb/connection.js'; // Ajusta la ruta según sea necesario
+import mongoosePaginate from 'mongoose-paginate-v2'; // Importo el paginador de mongoose**
+import { Schema, model } from "mongoose";
+import { initMongoDB } from '../../mongodb/connection.js'; 
 
 
 // Definición del esquema de usuario
@@ -46,14 +46,20 @@ const UserSchema = new Schema({
   githubId: { 
     type: String 
   },
-  // Agrega el campo de referencia al carrito (cart) si es necesario
+  // Agrega el campo de referencia al carrito (cart) 
   cart: {
     type: Schema.Types.ObjectId,
     ref: 'Cart'
-  }
-});
+  } 
 
-// Inicializamos el paginate
+
+}, {
+    timestamps: true,
+  }
+
+);
+
+
 UserSchema.plugin(mongoosePaginate);
 
 // Pre middleware para el método find y findOne
@@ -67,7 +73,6 @@ UserSchema.pre('findOne', function() {
 
 // Exportamos el modelo de usuario
 export const UserModel = model('User', UserSchema);
-
 
 
 

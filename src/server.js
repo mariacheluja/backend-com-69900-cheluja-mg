@@ -5,6 +5,10 @@ import { Server } from 'socket.io';
 import morgan from 'morgan';
 import { errorHandler } from "./middlewares/errorHandler.js";
 import { initMongoDB } from "./db/database.js";
+import mongoose from "mongoose";
+import routes from "./routes/index.js";
+import { config } from "./config/config.js";
+
 
 import ProductsManager from './managers/product.manager.js';
 import CartManager from './managers/cart.manager.js';
@@ -53,6 +57,20 @@ app.engine("handlebars", handlebars.engine());
 app.set("view engine", "handlebars");
 app.set("views", __dirname + "/views");
 
+// Passport config
+initializePassport();
+app.use(passport.initialize());
+
+// Mongo config
+mongoose
+  .connect(config.MONGO_URI)
+  .then(() => {
+    console.log("Conectado a MongoDB");
+  })
+  .catch((error) => {
+    console.log(error);
+  });
+
 // Rutas
 app.use("/api/session", sessionRouter); // Corregido aquí
 app.use("/", viewsRouter);
@@ -65,12 +83,17 @@ app.use("/vista1", viewsRouter);
 app.use("/vista2", viewsRouter);
 app.use("/websocket", viewsRouter);
 app.use("/products", productsRouter);
+app.use("/api/users", userRouter);
 
 // Middleware para manejo de errores
 app.use(errorHandler);
 
 // Inicialización de la base de datos
 initMongoDB();
+
+// Routes
+app.use("/api", routes);
+
 
 // Configuración del servidor y socket.io
 const httpServer = app.listen(PORT, () => {
